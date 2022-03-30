@@ -1,4 +1,11 @@
-//INFO
+const CAM_SP_INERT = .9;
+const CAM_SC_INERT = .9;
+
+const CELLSIZE_MAX = window.innerWidth/5;
+const CELLSIZE_MIN = 0.1;
+
+const FRTIME = 10;
+
 class Info {
     constructor() {
         let cont = document.getElementById('cont');
@@ -23,12 +30,12 @@ class Info {
             this.fld.tick(ctx, this.campos);
             this.lasttick = time;
         }
+
         this.campos = this.campos.add(this.camspeed);
-        const CAM_SP_INERT = .9;
+        this.camscale *= 1 + (1 - this.camscale)*(1 - CAM_SC_INERT);
+        
         this.camspeed = this.camspeed.mult(CAM_SP_INERT);
         this.campos = this.campos.add(this.mousePos).mult(this.fld.scale(this.camscale)).subtr(this.mousePos);
-        const CAM_SC_INERT = .1;
-        this.camscale *= 1 + (1 - this.camscale)*CAM_SC_INERT;
     }
     move(mouse) {
         if(this.mdown) {
@@ -117,10 +124,8 @@ class Field {
         });
     }
     scale(scl) {
-        const CSIZE_MAX = window.innerWidth/5;
-        const CSIZE_MIN = 0.1;
         let old = this.csize;
-        this.csize = Math.min((Math.max(this.csize * scl, CSIZE_MIN)), CSIZE_MAX);
+        this.csize = Math.min((Math.max(this.csize * scl, CELLSIZE_MIN)), CELLSIZE_MAX);
         return this.csize / old;
     }
     draw(ctx, campos) {
@@ -263,7 +268,6 @@ function main() {
     process(canvas, ctx, 0, info);
 }
 function process(canvas, ctx, lastfrtime, info) {
-    const FRTIME = 1;
     var start = new Date();
     let buff = switchBuffer(canvas);
     info = loop(canvas[buff], ctx[buff], Math.max(FRTIME, lastfrtime), info);
