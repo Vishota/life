@@ -23,3 +23,5 @@ Below are some interesting Game of Life configurations. You can load them by pre
 ```JSON
 {"7":{"9":true},"9":{"8":true,"9":true},"11":{"5":true,"6":true,"7":true},"13":{"4":true,"5":true,"6":true},"14":{"5":true}}
 ```
+## Demonstration  
+You can try it clicking [here](https://vishota.github.io/life/)
