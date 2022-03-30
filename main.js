@@ -1,7 +1,6 @@
 //INFO
 class Info {
     constructor() {
-        //document.addEventListener("click", t => {this.click(t)});
         let cont = document.getElementById('cont');
         document.addEventListener("mouseleave", t => {this.mdown = false;});
         cont.addEventListener("mousemove", t => {this.move(t);});
@@ -79,7 +78,7 @@ class Field {
     load() {
         if(document.querySelector('#wn') == undefined) {
             document.querySelector('body').insertAdjacentHTML('afterbegin', '<div class="wn" id="wn"><div class="wnhead"><div class="wnname">Loading</div><div class="wnclose" onclick="let t = document.querySelector(`#wn`); t.parentNode.removeChild(t)">X</div></div><div class="info"><input><button>Load</button></div></div>');
-            document.querySelector(`.wn > .info > button`).addEventListener('click', () => {console.log(JSON.parse(document.querySelector(`.wn > .info > input`).value)); this.cells = JSON.parse(document.querySelector(`.wn > .info > input`).value)});
+            document.querySelector(`.wn > .info > button`).addEventListener('click', () => {this.cells = JSON.parse(document.querySelector(`.wn > .info > input`).value)});
         }
     }
     tick(ctx, campos) {
@@ -112,8 +111,6 @@ class Field {
             let jkeys = Object.keys(neighbors[i]);
             jkeys.forEach(j => {
                 let t = this.cellToCoords(i, j, campos);
-                //ctx.fillStyle = '#f00';
-                //ctx.fillText(neighbors[i][j], t.x, t.y);
                 if(neighbors[i][j] == 3) this.fillCell(i, j);
                 else if(neighbors[i][j] != 2) this.clearCell(i, j);
             });
@@ -139,7 +136,6 @@ class Field {
                 });
             }
         });
-        //DRAWING CELLS
         if(this.drawCells && this.csize > 2) {
             ctx.strokeStyle = '#999';
             for(let i = Math.floor(campos.y / this.csize) * this.csize - campos.y; i < window.innerHeight; i += this.csize) {
@@ -187,7 +183,6 @@ class Field {
     }
     click(x, y, campos) {
         let t = this.coordsToCell(x, y, campos);
-        console.log(t);
         this.invertCell(t.x, t.y);
     }
     move(x, y, campos, fill) {
@@ -220,10 +215,6 @@ class Vec2D {
         return this.x * vec.x + this.y * vec.y;
     }
     div(val) {
-        if(val==0) {
-            console.log("Division by zero (vec2d.div())");
-            return this;
-        }
         return new Vec2D(this.x / val, this.y / val);
     }
     len() {
@@ -233,10 +224,6 @@ class Vec2D {
         return this.div(this.len());
     }
     proj(vec) {
-        if(vec.len==0) {
-            console.log("Division by zero (vec2d.proj())");
-            return vec;
-        }
         return this.scalProd(vec) / vec.len();
     }
     constructor(x, y) {
