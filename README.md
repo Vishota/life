@@ -1,4 +1,4 @@
-# Conway's Game of Life  
+# Conway's Game of Life on JavaScript  
 ## Controls  
 **Mouse** - click/click&move to make cells *live* or *dead*  
 **WASD keys** - camera movement  
