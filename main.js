@@ -1,10 +1,17 @@
-const CAM_SP_INERT = .9;
-const CAM_SC_INERT = .9;
+const SCL_SPEED = 1.05;
+const MOVE_SPEED = 10;
+
+const SCL_INERT = .9;
+const MOVE_INERT = .9;
+
+const TICKSPEED_CHANGE = 1.25;
+const TICKTIME_MIN = 0;
+const TICKTIME_MAX = 5000;
 
 const CELLSIZE_MAX = window.innerWidth/5;
 const CELLSIZE_MIN = 0.1;
 
-const FRTIME = 10;
+const FRTIME = 0;
 
 class Info {
     constructor() {
@@ -32,9 +39,9 @@ class Info {
         }
 
         this.campos = this.campos.add(this.camspeed);
-        this.camscale *= 1 + (1 - this.camscale)*(1 - CAM_SC_INERT);
+        this.camscale *= 1 + (1 - this.camscale)*(1 - SCL_INERT);
         
-        this.camspeed = this.camspeed.mult(CAM_SP_INERT);
+        this.camspeed = this.camspeed.mult(MOVE_INERT);
         this.campos = this.campos.add(this.mousePos).mult(this.fld.scale(this.camscale)).subtr(this.mousePos);
     }
     move(mouse) {
@@ -56,14 +63,14 @@ class Info {
         this.fld.click(mouse.pageX, mouse.pageY, this.campos);
     }
     kdown(key) {
-        if(key.code == 'KeyW') this.camspeed.y = -10;
-        if(key.code == 'KeyA') this.camspeed.x = -10;
-        if(key.code == 'KeyS') this.camspeed.y = 10;
-        if(key.code == 'KeyD') this.camspeed.x = 10;
-        if(key.key == '+') this.camscale = 1.05;
-        if(key.key == '-') this.camscale = 0.95;
-        if(key.code == 'KeyE') this.ticktime = Math.max(this.ticktime * 0.8, 10);
-        if(key.code == 'KeyQ') this.ticktime = Math.min(this.ticktime * 1.25, 5000);
+        if(key.code == 'KeyW') this.camspeed.y = -MOVE_SPEED;
+        if(key.code == 'KeyA') this.camspeed.x = -MOVE_SPEED;
+        if(key.code == 'KeyS') this.camspeed.y = MOVE_SPEED;
+        if(key.code == 'KeyD') this.camspeed.x = MOVE_SPEED;
+        if(key.key == '+') this.camscale = SCL_SPEED;
+        if(key.key == '-') this.camscale = 1 / SCL_SPEED;
+        if(key.code == 'KeyE') this.ticktime = Math.max(this.ticktime / TICKSPEED_CHANGE, TICKTIME_MIN);
+        if(key.code == 'KeyQ') this.ticktime = Math.min(Math.max(this.ticktime, 1) * TICKSPEED_CHANGE, TICKTIME_MAX);
         if(key.code == 'Space') this.paused = !this.paused;
         if(key.code == 'KeyC') this.fld.toggleCellsVisibility();
         if(key.code == 'KeyT') this.fld.stringify();
